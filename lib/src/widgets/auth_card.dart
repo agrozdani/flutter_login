@@ -298,7 +298,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                     loadingController: _isLoadingFirstTime
                         ? _formLoadingController
                         : (_formLoadingController..value = 1.0),
-                    usernameValidator: widget.usernameValidator,
+                    //usernameValidator: widget.usernameValidator,
                     emailValidator: widget.emailValidator,
                     passwordValidator: widget.passwordValidator,
                     onSwitchRecoveryPassword: () => _switchRecovery(true),
@@ -345,7 +345,7 @@ class _LoginCard extends StatefulWidget {
   _LoginCard({
     Key? key,
     this.loadingController,
-    required this.usernameValidator,
+    //required this.usernameValidator,
     required this.emailValidator,
     required this.passwordValidator,
     required this.onSwitchRecoveryPassword,
@@ -357,7 +357,7 @@ class _LoginCard extends StatefulWidget {
   }) : super(key: key);
 
   final AnimationController? loadingController;
-  final FormFieldValidator<String>? usernameValidator;
+  //final FormFieldValidator<String>? usernameValidator;
   final FormFieldValidator<String>? emailValidator;
   final FormFieldValidator<String>? passwordValidator;
   final Function onSwitchRecoveryPassword;
@@ -599,7 +599,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (value) => _submit(),
-      validator: widget.usernameValidator,
+      //validator: widget.usernameValidator,
       onSaved: (value) => auth.username = value!,
     );
   }
