@@ -5,13 +5,13 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:flutter_login/src/constants.dart';
 import 'package:flutter_login/src/widgets/animated_button.dart';
 
-// TODO: get this value from fluter_login package
 const loadingAnimationDuration = Duration(seconds: 1);
 
 class LoginCallback {
   Future<String>? onLogin(LoginData? data) => null;
   Future<String>? onSignup(LoginData? data) => null;
   Future<String>? onRecoverPassword(String? data) => null;
+  String? usernameValidator(String? value) => null;
   String? emailValidator(String? value) => null;
   String? passwordValidator(String? value) => null;
   void onSubmitAnimationCompleted() {}
@@ -24,8 +24,14 @@ final mockCallback = MockCallback();
 List<LoginData> stubCallback(MockCallback mockCallback) {
   reset(mockCallback);
 
-  final user = LoginData(name: 'near@gmail.com', password: '12345');
-  final invalidUser = LoginData(name: 'not.exists@gmail.com', password: '');
+  final user =
+      LoginData(name: 'near@gmail.com', password: '12345', username: 'near');
+  final invalidUser =
+      LoginData(name: 'not.exists@gmail.com', password: '', username: '');
+
+  when(mockCallback.usernameValidator(user.name)).thenReturn(null);
+  when(mockCallback.usernameValidator('invalid-username'))
+      .thenReturn('Invalid!');
 
   when(mockCallback.emailValidator(user.name)).thenReturn(null);
   when(mockCallback.emailValidator('invalid-name')).thenReturn('Invalid!');

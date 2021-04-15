@@ -27,6 +27,7 @@ class AuthCard extends StatefulWidget {
     Key? key,
     this.padding = const EdgeInsets.all(0),
     this.loadingController,
+    this.usernameValidator,
     this.emailValidator,
     this.passwordValidator,
     this.onSubmit,
@@ -38,6 +39,7 @@ class AuthCard extends StatefulWidget {
 
   final EdgeInsets padding;
   final AnimationController? loadingController;
+  final FormFieldValidator<String>? usernameValidator;
   final FormFieldValidator<String>? emailValidator;
   final FormFieldValidator<String>? passwordValidator;
   final Function? onSubmit;
@@ -295,6 +297,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                     loadingController: _isLoadingFirstTime
                         ? _formLoadingController
                         : (_formLoadingController..value = 1.0),
+                    usernameValidator: widget.usernameValidator,
                     emailValidator: widget.emailValidator,
                     passwordValidator: widget.passwordValidator,
                     onSwitchRecoveryPassword: () => _switchRecovery(true),
@@ -341,6 +344,7 @@ class _LoginCard extends StatefulWidget {
   _LoginCard({
     Key? key,
     this.loadingController,
+    required this.usernameValidator,
     required this.emailValidator,
     required this.passwordValidator,
     required this.onSwitchRecoveryPassword,
@@ -352,6 +356,7 @@ class _LoginCard extends StatefulWidget {
   }) : super(key: key);
 
   final AnimationController? loadingController;
+  final FormFieldValidator<String>? usernameValidator;
   final FormFieldValidator<String>? emailValidator;
   final FormFieldValidator<String>? passwordValidator;
   final Function onSwitchRecoveryPassword;
@@ -368,9 +373,11 @@ class _LoginCard extends StatefulWidget {
 class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+  final _usernameFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
 
+  TextEditingController? _usernameController;
   TextEditingController? _nameController;
   TextEditingController? _passController;
   TextEditingController? _confirmPassController;
@@ -388,6 +395,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   ///list of AnimationController each one responsible for a authentication provider icon
   List<AnimationController> _providerControllerList = <AnimationController>[];
 
+  Interval? _usernameTextFieldLoadingAnimationInterval;
   Interval? _nameTextFieldLoadingAnimationInterval;
   Interval? _passTextFieldLoadingAnimationInterval;
   Interval? _textButtonLoadingAnimationInterval;
@@ -400,6 +408,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     super.initState();
 
     final auth = Provider.of<Auth>(context, listen: false);
+    _usernameController = TextEditingController(text: auth.username);
     _nameController = TextEditingController(text: auth.email);
     _passController = TextEditingController(text: auth.password);
     _confirmPassController = TextEditingController(text: auth.confirmPassword);
@@ -433,7 +442,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
           ),
         )
         .toList();
-
+    _usernameTextFieldLoadingAnimationInterval = const Interval(.15, 1.0);
     _nameTextFieldLoadingAnimationInterval = const Interval(0, .85);
     _passTextFieldLoadingAnimationInterval = const Interval(.15, 1.0);
     _textButtonLoadingAnimationInterval =
@@ -457,6 +466,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   @override
   void dispose() {
     _loadingController.removeStatusListener(handleLoadingAnimationStatus);
+    _usernameFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
 
@@ -503,9 +513,11 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       error = await auth.onLogin!(LoginData(
         name: auth.email,
         password: auth.password,
+        username: auth.username,
       ));
     } else {
       error = await auth.onSignup!(LoginData(
+        username: auth.username,
         name: auth.email,
         password: auth.password,
       ));
@@ -573,15 +585,34 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     return true;
   }
 
+  Widget _buildUsernameField(double width, LoginMessages messages, Auth auth) {
+    return AnimatedUsernameTextFormField(
+      controller: _usernameController,
+      animatedWidth: width,
+      enabled: auth.isSignup,
+      inertiaController: _postSwitchAuthController,
+      inertiaDirection: TextFieldInertiaDirection.right,
+      focusNode: _usernameFocusNode,
+      loadingController: _loadingController,
+      interval: _usernameTextFieldLoadingAnimationInterval,
+      labelText: messages.usernameHint,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (value) => _submit(),
+      validator: widget.usernameValidator,
+      onSaved: (value) => auth.username = value!,
+    );
+  }
+
   Widget _buildNameField(double width, LoginMessages messages, Auth auth) {
     return AnimatedTextFormField(
       controller: _nameController,
       width: width,
       loadingController: _loadingController,
       interval: _nameTextFieldLoadingAnimationInterval,
-      labelText: messages.usernameHint,
+      labelText: messages.nameHint,
       autofillHints: [AutofillHints.username],
-      prefixIcon: Icon(FontAwesomeIcons.solidUserCircle),
+      prefixIcon: Icon(FontAwesomeIcons.solidEnvelope),
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (value) {
@@ -742,18 +773,41 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       key: _formKey,
       child: Column(
         children: [
-          Container(
+          Padding(
             padding: EdgeInsets.only(
               left: cardPadding,
               right: cardPadding,
               top: cardPadding + 10,
+              bottom: cardPadding - 5,
+            ),
+            child: ExpandableContainer(
+              backgroundColor: theme.accentColor,
+              controller: _switchAuthController,
+              initialState: isLogin
+                  ? ExpandableContainerState.shrunk
+                  : ExpandableContainerState.expanded,
+              alignment: Alignment.topLeft,
+              color: theme.cardTheme.color,
+              width: cardWidth,
+              padding: EdgeInsets.symmetric(
+                horizontal: cardPadding,
+                vertical: 0,
+              ),
+              onExpandCompleted: () => _postSwitchAuthController.forward(),
+              child: _buildUsernameField(textFieldWidth, messages, auth),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              left: cardPadding,
+              right: cardPadding,
             ),
             width: cardWidth,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 _buildNameField(textFieldWidth, messages, auth),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
                 _buildPasswordField(textFieldWidth, messages, auth),
                 SizedBox(height: 10),
               ],
@@ -770,7 +824,6 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             width: cardWidth,
             padding: EdgeInsets.symmetric(
               horizontal: cardPadding,
-              vertical: 10,
             ),
             onExpandCompleted: () => _postSwitchAuthController.forward(),
             child: _buildConfirmPasswordField(textFieldWidth, messages, auth),
@@ -882,7 +935,7 @@ class _RecoverCardState extends State<_RecoverCard>
     return AnimatedTextFormField(
       controller: _nameController,
       width: width,
-      labelText: messages.usernameHint,
+      labelText: messages.nameHint,
       prefixIcon: Icon(FontAwesomeIcons.solidUserCircle),
       keyboardType: TextInputType.emailAddress,
       autocorrect: false,

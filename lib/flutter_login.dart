@@ -228,6 +228,7 @@ class FlutterLogin extends StatefulWidget {
       this.logo,
       this.messages,
       this.theme,
+      this.usernameValidator,
       this.emailValidator,
       this.passwordValidator,
       this.onSubmitAnimationCompleted,
@@ -277,6 +278,9 @@ class FlutterLogin extends StatefulWidget {
   /// Same as [emailValidator] but for password
   final FormFieldValidator<String>? passwordValidator;
 
+  /// Same as [emailValidator] but for username
+  final FormFieldValidator<String>? usernameValidator;
+
   /// Called after the submit animation's completed. Put your route transition
   /// logic here. Recommend to use with [logoTag] and [titleTag]
   final Function? onSubmitAnimationCompleted;
@@ -306,6 +310,13 @@ class FlutterLogin extends StatefulWidget {
 
   /// Optional footer text for example a copyright notice
   final String? footer;
+
+  static final FormFieldValidator<String> defaultUsernameValidator = (value) {
+    if (value!.isEmpty || !Regex.username.hasMatch(value)) {
+      return 'Invalid username!';
+    }
+    return null;
+  };
 
   static final FormFieldValidator<String> defaultEmailValidator = (value) {
     if (value!.isEmpty || !Regex.email.hasMatch(value)) {
@@ -575,6 +586,8 @@ class _FlutterLoginState extends State<FlutterLogin>
     const cardInitialHeight = 300;
     final cardTopPosition = deviceSize.height / 2 - cardInitialHeight / 2;
     final headerHeight = cardTopPosition - headerMargin;
+    final usernameValidator =
+        widget.usernameValidator ?? FlutterLogin.defaultUsernameValidator;
     final emailValidator =
         widget.emailValidator ?? FlutterLogin.defaultEmailValidator;
     final passwordValidator =
@@ -631,6 +644,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                         key: authCardKey,
                         padding: EdgeInsets.only(top: cardTopPosition),
                         loadingController: _loadingController,
+                        usernameValidator: usernameValidator,
                         emailValidator: emailValidator,
                         passwordValidator: passwordValidator,
                         onSubmit: _reverseHeaderAnimation,
