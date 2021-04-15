@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/src/models/signup_data.dart';
 
 import '../../flutter_login.dart';
 import '../models/login_data.dart';
 
 enum AuthMode { Signup, Login }
+
+/// The result is an error message, callback successes if message is null
+typedef SignupCallback = Future<String?>? Function(SignupData);
 
 /// The result is an error message, callback successes if message is null
 typedef AuthCallback = Future<String?>? Function(LoginData);
@@ -30,7 +34,7 @@ class Auth with ChangeNotifier {
         _confirmPassword = confirmPassword;
 
   final AuthCallback? onLogin;
-  final AuthCallback? onSignup;
+  final SignupCallback? onSignup;
   final RecoverCallback? onRecoverPassword;
   final List<LoginProvider>? loginProviders;
 

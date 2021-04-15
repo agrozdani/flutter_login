@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/src/models/signup_data.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -516,7 +517,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
         //username: auth.username,
       ));
     } else {
-      error = await auth.onSignup!(LoginData(
+      error = await auth.onSignup!(SignupData(
         username: auth.username,
         name: auth.email,
         password: auth.password,

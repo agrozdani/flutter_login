@@ -243,7 +243,7 @@ class FlutterLogin extends StatefulWidget {
       : super(key: key);
 
   /// Called when the user hit the submit button when in sign up mode
-  final AuthCallback onSignup;
+  final SignupCallback onSignup;
 
   /// Called when the user hit the submit button when in login mode
   final AuthCallback onLogin;
