@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class LoginMessages with ChangeNotifier {
   LoginMessages({
     this.usernameHint = defaultUsernameHint,
-    this.nameHint = defaultNameHint,
+    this.emailHint = defaultEmailHint,
     this.passwordHint = defaultPasswordHint,
     this.confirmPasswordHint = defaultConfirmPasswordHint,
     this.forgotPasswordButton = defaultForgotPasswordButton,
@@ -20,7 +20,7 @@ class LoginMessages with ChangeNotifier {
     this.signUpSuccess = defaultSignUpSuccess,
   });
   static const defaultUsernameHint = 'Username';
-  static const defaultNameHint = 'Email';
+  static const defaultEmailHint = 'Email';
   static const defaultPasswordHint = 'Password';
   static const defaultConfirmPasswordHint = 'Confirm Password';
   static const defaultForgotPasswordButton = 'Forgot Password?';
@@ -41,7 +41,7 @@ class LoginMessages with ChangeNotifier {
   final String usernameHint;
 
   /// Hint text of the user name [TextField]
-  final String nameHint;
+  final String emailHint;
 
   /// Hint text of the password [TextField]
   final String passwordHint;

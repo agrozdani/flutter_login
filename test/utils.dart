@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/src/models/signup_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -9,7 +10,7 @@ const loadingAnimationDuration = Duration(seconds: 1);
 
 class LoginCallback {
   Future<String>? onLogin(LoginData? data) => null;
-  Future<String>? onSignup(LoginData? data) => null;
+  Future<String>? onSignup(SignupData? data) => null;
   Future<String>? onRecoverPassword(String? data) => null;
   String? usernameValidator(String? value) => null;
   String? emailValidator(String? value) => null;
@@ -24,16 +25,18 @@ final mockCallback = MockCallback();
 List<LoginData> stubCallback(MockCallback mockCallback) {
   reset(mockCallback);
 
-  final user =
-      LoginData(name: 'near@gmail.com', password: '12345', username: 'near');
-  final invalidUser =
-      LoginData(name: 'not.exists@gmail.com', password: '', username: '');
+  final user = LoginData(email: 'near@gmail.com', password: '12345');
+  final user1 =
+      SignupData(email: 'near@gmail.com', password: '12345', username: 'near');
+  final invalidUser = LoginData(email: 'not.exists@gmail.com', password: '');
+  final invalidUser1 =
+      SignupData(email: 'not.exists@gmail.com', password: '', username: '');
 
-  when(mockCallback.usernameValidator(user.name)).thenReturn(null);
+  when(mockCallback.usernameValidator(user.email)).thenReturn(null);
   when(mockCallback.usernameValidator('invalid-username'))
       .thenReturn('Invalid!');
 
-  when(mockCallback.emailValidator(user.name)).thenReturn(null);
+  when(mockCallback.emailValidator(user.email)).thenReturn(null);
   when(mockCallback.emailValidator('invalid-name')).thenReturn('Invalid!');
 
   when(mockCallback.passwordValidator(user.password)).thenReturn(null);
@@ -43,8 +46,8 @@ List<LoginData> stubCallback(MockCallback mockCallback) {
   when(mockCallback.onLogin(invalidUser))
       .thenAnswer((_) => Future.value('Invalid!'));
 
-  when(mockCallback.onSignup(user)).thenAnswer((_) => null);
-  when(mockCallback.onSignup(invalidUser))
+  when(mockCallback.onSignup(user1)).thenAnswer((_) => null);
+  when(mockCallback.onSignup(invalidUser1))
       .thenAnswer((_) => Future.value('Invalid!'));
 
   return [user, invalidUser];

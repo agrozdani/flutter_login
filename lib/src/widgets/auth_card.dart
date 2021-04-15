@@ -512,14 +512,13 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
 
     if (auth.isLogin) {
       error = await auth.onLogin!(LoginData(
-        name: auth.email,
+        email: auth.email,
         password: auth.password,
-        //username: auth.username,
       ));
     } else {
       error = await auth.onSignup!(SignupData(
         username: auth.username,
-        name: auth.email,
+        email: auth.email,
         password: auth.password,
       ));
     }
@@ -605,13 +604,13 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildNameField(double width, LoginMessages messages, Auth auth) {
+  Widget _buildEmailField(double width, LoginMessages messages, Auth auth) {
     return AnimatedTextFormField(
       controller: _nameController,
       width: width,
       loadingController: _loadingController,
       interval: _nameTextFieldLoadingAnimationInterval,
-      labelText: messages.nameHint,
+      labelText: messages.emailHint,
       autofillHints: [AutofillHints.username],
       prefixIcon: Icon(FontAwesomeIcons.solidEnvelope),
       keyboardType: TextInputType.emailAddress,
@@ -807,7 +806,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _buildNameField(textFieldWidth, messages, auth),
+                _buildEmailField(textFieldWidth, messages, auth),
                 SizedBox(height: 10),
                 _buildPasswordField(textFieldWidth, messages, auth),
                 SizedBox(height: 10),
@@ -936,7 +935,7 @@ class _RecoverCardState extends State<_RecoverCard>
     return AnimatedTextFormField(
       controller: _nameController,
       width: width,
-      labelText: messages.nameHint,
+      labelText: messages.emailHint,
       prefixIcon: Icon(FontAwesomeIcons.solidUserCircle),
       keyboardType: TextInputType.emailAddress,
       autocorrect: false,

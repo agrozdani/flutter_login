@@ -5,6 +5,7 @@ import 'constants.dart';
 import 'custom_route.dart';
 import 'dashboard_screen.dart';
 import 'users.dart';
+import 'package:flutter_login/src/models/signup_data.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = '/auth';
@@ -13,10 +14,25 @@ class LoginScreen extends StatelessWidget {
 
   Future<String?> _loginUser(LoginData data) {
     return Future.delayed(loginTime).then((_) {
-      if (!mockUsers.containsKey(data.name)) {
+      if (!mockUsers.containsKey(data.email)) {
         return 'Username not exists';
       }
-      if (mockUsers[data.name] != data.password) {
+      if (mockUsers[data.email] != data.password) {
+        return 'Password does not match';
+      }
+      return null;
+    });
+  }
+
+  Future<String?> _signupUser(SignupData data) {
+    return Future.delayed(loginTime).then((_) {
+      if (!mockUsers.containsKey(data.username)) {
+        return 'Username does not exists';
+      }
+      if (!mockUsers.containsKey(data.email)) {
+        return 'Email does not exists';
+      }
+      if (mockUsers[data.email] != data.password) {
         return 'Password does not match';
       }
       return null;
@@ -155,15 +171,15 @@ class LoginScreen extends StatelessWidget {
       },
       onLogin: (loginData) {
         print('Login info');
-        print('Name: ${loginData.name}');
+        print('Name: ${loginData.email}');
         print('Password: ${loginData.password}');
         return _loginUser(loginData);
       },
-      onSignup: (loginData) {
+      onSignup: (signupData) {
         print('Signup info');
-        print('Name: ${loginData.name}');
-        print('Password: ${loginData.password}');
-        return _loginUser(loginData);
+        print('Name: ${signupData.email}');
+        print('Password: ${signupData.password}');
+        return _signupUser(signupData);
       },
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(FadePageRoute(
