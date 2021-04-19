@@ -298,7 +298,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                     loadingController: _isLoadingFirstTime
                         ? _formLoadingController
                         : (_formLoadingController..value = 1.0),
-                    //usernameValidator: widget.usernameValidator,
+                    usernameValidator: widget.usernameValidator,
                     emailValidator: widget.emailValidator,
                     passwordValidator: widget.passwordValidator,
                     onSwitchRecoveryPassword: () => _switchRecovery(true),
@@ -345,7 +345,7 @@ class _LoginCard extends StatefulWidget {
   _LoginCard({
     Key? key,
     this.loadingController,
-    //required this.usernameValidator,
+    required this.usernameValidator,
     required this.emailValidator,
     required this.passwordValidator,
     required this.onSwitchRecoveryPassword,
@@ -357,7 +357,7 @@ class _LoginCard extends StatefulWidget {
   }) : super(key: key);
 
   final AnimationController? loadingController;
-  //final FormFieldValidator<String>? usernameValidator;
+  final FormFieldValidator<String>? usernameValidator;
   final FormFieldValidator<String>? emailValidator;
   final FormFieldValidator<String>? passwordValidator;
   final Function onSwitchRecoveryPassword;
@@ -375,6 +375,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final _usernameFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
 
@@ -468,6 +469,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   void dispose() {
     _loadingController.removeStatusListener(handleLoadingAnimationStatus);
     _usernameFocusNode.dispose();
+    _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
 
@@ -598,8 +600,14 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       labelText: messages.usernameHint,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
-      onFieldSubmitted: (value) => _submit(),
-      //validator: widget.usernameValidator,
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(_emailFocusNode);
+      },
+      validator: auth.isSignup
+          ? (value) {
+              widget.usernameValidator;
+            }
+          : (value) => null,
       onSaved: (value) => auth.username = value!,
     );
   }
@@ -615,6 +623,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       prefixIcon: Icon(FontAwesomeIcons.solidEnvelope),
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
+      focusNode: _emailFocusNode,
       onFieldSubmitted: (value) {
         FocusScope.of(context).requestFocus(_passwordFocusNode);
       },

@@ -313,7 +313,7 @@ class FlutterLogin extends StatefulWidget {
 
   static final FormFieldValidator<String> defaultUsernameValidator = (value) {
     if (value!.isEmpty || !Regex.username.hasMatch(value)) {
-      return 'Invalid username!';
+      return 'Only lowercase letters, numbers and _ - . ';
     }
     return null;
   };
