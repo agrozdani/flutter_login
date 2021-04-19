@@ -33,7 +33,6 @@ void main() {
     clickSubmitButton();
     await tester.pumpAndSettle();
 
-    // TODO: put error messages into variables
     expect(nameTextFieldWidget(tester).decoration!.errorText, 'Invalid email!');
 
     // missing '@'
@@ -506,7 +505,7 @@ void main() {
 
     // fail at onLogin
     await simulateOpenSoftKeyboard(tester, loginBuilder());
-    await tester.enterText(findNameTextField(), invalidUser.name);
+    await tester.enterText(findNameTextField(), invalidUser.email);
     await tester.pumpAndSettle();
     await tester.enterText(findPasswordTextField(), invalidUser.password);
     await tester.pumpAndSettle();
@@ -514,7 +513,7 @@ void main() {
     await tester.pumpAndSettle();
 
     verifyInOrder([
-      mockCallback.emailValidator(invalidUser.name),
+      mockCallback.emailValidator(invalidUser.email),
       mockCallback.passwordValidator(invalidUser.password),
       mockCallback.onLogin(any),
     ]);
@@ -524,7 +523,7 @@ void main() {
 
     // pass
     await simulateOpenSoftKeyboard(tester, loginBuilder());
-    await tester.enterText(findNameTextField(), user.name);
+    await tester.enterText(findNameTextField(), user.email);
     await tester.pumpAndSettle();
     await tester.enterText(findPasswordTextField(), user.password);
     await tester.pumpAndSettle();
@@ -532,7 +531,7 @@ void main() {
     await tester.pumpAndSettle();
 
     verifyInOrder([
-      mockCallback.emailValidator(user.name),
+      mockCallback.emailValidator(user.email),
       mockCallback.passwordValidator(user.password),
       mockCallback.onLogin(any),
       mockCallback.onSubmitAnimationCompleted(),
@@ -565,7 +564,7 @@ void main() {
 
     // fail at validating - confirm password not match
     await simulateOpenSoftKeyboard(tester, loginBuilder());
-    await tester.enterText(findNameTextField(), user.name);
+    await tester.enterText(findNameTextField(), user.email);
     await tester.pumpAndSettle();
     await tester.enterText(findPasswordTextField(), user.password);
     await tester.pumpAndSettle();
@@ -574,7 +573,7 @@ void main() {
     clickSubmitButton();
     await tester.pumpAndSettle();
 
-    verifyNever(mockCallback.emailValidator(invalidUser.name));
+    verifyNever(mockCallback.emailValidator(invalidUser.email));
     verifyNever(mockCallback.passwordValidator(invalidUser.password));
     verifyNever(mockCallback.onSignup(any));
     verifyNever(mockCallback.onSubmitAnimationCompleted());
@@ -603,7 +602,7 @@ void main() {
 
     // fail at onSignup
     await simulateOpenSoftKeyboard(tester, loginBuilder());
-    await tester.enterText(findNameTextField(), invalidUser.name);
+    await tester.enterText(findNameTextField(), invalidUser.email);
     await tester.pumpAndSettle();
     await tester.enterText(findPasswordTextField(), invalidUser.password);
     await tester.pumpAndSettle();
@@ -614,7 +613,7 @@ void main() {
     await tester.pumpAndSettle();
 
     verifyInOrder([
-      mockCallback.emailValidator(invalidUser.name),
+      mockCallback.emailValidator(invalidUser.email),
       mockCallback.passwordValidator(invalidUser.password),
       mockCallback.onSignup(any),
     ]);
@@ -624,7 +623,7 @@ void main() {
 
     // pass
     await simulateOpenSoftKeyboard(tester, loginBuilder());
-    await tester.enterText(findNameTextField(), user.name);
+    await tester.enterText(findNameTextField(), user.email);
     await tester.pumpAndSettle();
     await tester.enterText(findPasswordTextField(), user.password);
     await tester.pumpAndSettle();
@@ -634,7 +633,7 @@ void main() {
     await tester.pumpAndSettle();
 
     verifyInOrder([
-      mockCallback.emailValidator(user.name),
+      mockCallback.emailValidator(user.email),
       mockCallback.passwordValidator(user.password),
       mockCallback.onSignup(any),
       mockCallback.onSubmitAnimationCompleted(),
@@ -710,7 +709,6 @@ void main() {
     addTearDown(() => clearScreenSize());
   });
 
-  // TODO: wait for flutter to add support for testing in web environment on Windows 10
   // https://github.com/flutter/flutter/issues/44583
   // https://github.com/NearHuscarl/flutter_login/issues/7
   testWidgets('AnimatedText should be centered in mobile and web consistently',
