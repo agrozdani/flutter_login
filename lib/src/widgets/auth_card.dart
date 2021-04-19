@@ -603,11 +603,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       onFieldSubmitted: (value) {
         FocusScope.of(context).requestFocus(_emailFocusNode);
       },
-      validator: auth.isSignup
-          ? (value) {
-              widget.usernameValidator;
-            }
-          : (value) => null,
+      validator: auth.isSignup ? widget.usernameValidator : (value) => null,
       onSaved: (value) => auth.username = value!,
     );
   }
