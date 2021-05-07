@@ -28,10 +28,12 @@ class Auth with ChangeNotifier {
     String email = '',
     String password = '',
     String confirmPassword = '',
+    String birthday = '',
   })  : _username = username,
         _email = email,
         _password = password,
-        _confirmPassword = confirmPassword;
+        _confirmPassword = confirmPassword,
+        _birthday = birthday;
 
   final AuthCallback? onLogin;
   final SignupCallback? onSignup;
@@ -88,6 +90,13 @@ class Auth with ChangeNotifier {
   String get confirmPassword => _confirmPassword;
   set confirmPassword(String confirmPassword) {
     _confirmPassword = confirmPassword;
+    notifyListeners();
+  }
+
+  String _birthday = '';
+  String get birthday => _birthday;
+  set birthday(String birthday) {
+    _birthday = birthday;
     notifyListeners();
   }
 }

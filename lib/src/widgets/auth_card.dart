@@ -31,6 +31,7 @@ class AuthCard extends StatefulWidget {
     this.usernameValidator,
     this.emailValidator,
     this.passwordValidator,
+    this.birthdayValidator,
     this.onSubmit,
     this.onSubmitCompleted,
     this.hideForgotPasswordButton = false,
@@ -43,6 +44,7 @@ class AuthCard extends StatefulWidget {
   final FormFieldValidator<String>? usernameValidator;
   final FormFieldValidator<String>? emailValidator;
   final FormFieldValidator<String>? passwordValidator;
+  final FormFieldValidator<String>? birthdayValidator;
   final Function? onSubmit;
   final Function? onSubmitCompleted;
   final bool hideForgotPasswordButton;
@@ -301,6 +303,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                     usernameValidator: widget.usernameValidator,
                     emailValidator: widget.emailValidator,
                     passwordValidator: widget.passwordValidator,
+                    birthdayValidator: widget.birthdayValidator,
                     onSwitchRecoveryPassword: () => _switchRecovery(true),
                     onSubmitCompleted: () {
                       _forwardChangeRouteAnimation().then((_) {
@@ -348,6 +351,7 @@ class _LoginCard extends StatefulWidget {
     required this.usernameValidator,
     required this.emailValidator,
     required this.passwordValidator,
+    required this.birthdayValidator,
     required this.onSwitchRecoveryPassword,
     this.onSwitchAuth,
     this.onSubmitCompleted,
@@ -360,6 +364,7 @@ class _LoginCard extends StatefulWidget {
   final FormFieldValidator<String>? usernameValidator;
   final FormFieldValidator<String>? emailValidator;
   final FormFieldValidator<String>? passwordValidator;
+  final FormFieldValidator<String>? birthdayValidator;
   final Function onSwitchRecoveryPassword;
   final Function? onSwitchAuth;
   final Function? onSubmitCompleted;
@@ -378,11 +383,13 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
+  final _birthdayFocusNode = FocusNode();
 
   TextEditingController? _usernameController;
   TextEditingController? _nameController;
   TextEditingController? _passController;
   TextEditingController? _confirmPassController;
+  TextEditingController? _birthdayController;
 
   var _isLoading = false;
   var _isSubmitting = false;
@@ -400,6 +407,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   Interval? _usernameTextFieldLoadingAnimationInterval;
   Interval? _nameTextFieldLoadingAnimationInterval;
   Interval? _passTextFieldLoadingAnimationInterval;
+  Interval? _birthdayTextFieldLoadingAnimationInterval;
   Interval? _textButtonLoadingAnimationInterval;
   late Animation<double> _buttonScaleAnimation;
 
@@ -414,6 +422,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     _nameController = TextEditingController(text: auth.email);
     _passController = TextEditingController(text: auth.password);
     _confirmPassController = TextEditingController(text: auth.confirmPassword);
+    _birthdayController = TextEditingController(text: auth.birthday);
 
     _loadingController = widget.loadingController ??
         (AnimationController(
@@ -447,6 +456,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     _usernameTextFieldLoadingAnimationInterval = const Interval(.15, 1.0);
     _nameTextFieldLoadingAnimationInterval = const Interval(0, .85);
     _passTextFieldLoadingAnimationInterval = const Interval(.15, 1.0);
+    _birthdayTextFieldLoadingAnimationInterval = const Interval(.15, 1.0);
     _textButtonLoadingAnimationInterval =
         const Interval(.6, 1.0, curve: Curves.easeOut);
     _buttonScaleAnimation =
@@ -472,6 +482,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
+    _birthdayFocusNode.dispose();
 
     _switchAuthController.dispose();
     _postSwitchAuthController.dispose();
@@ -522,6 +533,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
         username: auth.username,
         email: auth.email,
         password: auth.password,
+        birthday: auth.birthday,
       ));
     }
 
@@ -601,10 +613,31 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (value) {
-        FocusScope.of(context).requestFocus(_emailFocusNode);
+        FocusScope.of(context).requestFocus(_birthdayFocusNode);
       },
       validator: auth.isSignup ? widget.usernameValidator : (value) => null,
       onSaved: (value) => auth.username = value!,
+    );
+  }
+
+  Widget _buildBirthdayField(double width, LoginMessages messages, Auth auth) {
+    return AnimatedBirthdayTextFormField(
+      controller: _birthdayController,
+      animatedWidth: width,
+      enabled: auth.isSignup,
+      inertiaController: _postSwitchAuthController,
+      inertiaDirection: TextFieldInertiaDirection.right,
+      focusNode: _birthdayFocusNode,
+      loadingController: _loadingController,
+      interval: _birthdayTextFieldLoadingAnimationInterval,
+      labelText: messages.birthdayHint,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(_emailFocusNode);
+      },
+      validator: auth.isSignup ? widget.birthdayValidator : (value) => null,
+      onSaved: (value) => auth.birthday = value!,
     );
   }
 
@@ -802,6 +835,22 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
               child: _buildUsernameField(textFieldWidth, messages, auth),
             ),
           ),
+          ExpandableContainer(
+            backgroundColor: theme.accentColor,
+            controller: _switchAuthController,
+            initialState: isLogin
+                ? ExpandableContainerState.shrunk
+                : ExpandableContainerState.expanded,
+            alignment: Alignment.topLeft,
+            color: theme.cardTheme.color,
+            width: cardWidth,
+            padding: EdgeInsets.symmetric(
+              horizontal: cardPadding,
+            ),
+            onExpandCompleted: () => _postSwitchAuthController.forward(),
+            child: _buildBirthdayField(textFieldWidth, messages, auth),
+          ),
+          SizedBox(height: 10),
           Container(
             padding: EdgeInsets.only(
               left: cardPadding,
