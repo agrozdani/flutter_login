@@ -352,8 +352,8 @@ class _AnimatedPasswordTextFormFieldState
   }
 }
 
-class AnimatedUsernameTextFormField extends StatefulWidget {
-  AnimatedUsernameTextFormField({
+class AnimatedAdditionalTextFormField extends StatefulWidget {
+  AnimatedAdditionalTextFormField({
     Key? key,
     this.interval = const Interval(0.0, 1.0),
     required this.animatedWidth,
@@ -370,6 +370,7 @@ class AnimatedUsernameTextFormField extends StatefulWidget {
     this.onFieldSubmitted,
     this.onSaved,
     this.autofillHints,
+    this.prefixIcon,
   })  : assert((inertiaController == null && inertiaDirection == null) ||
             (inertiaController != null && inertiaDirection != null)),
         super(key: key);
@@ -389,14 +390,15 @@ class AnimatedUsernameTextFormField extends StatefulWidget {
   final FormFieldSetter<String>? onSaved;
   final TextFieldInertiaDirection? inertiaDirection;
   final Iterable<String>? autofillHints;
+  final Icon? prefixIcon;
 
   @override
-  _AnimatedUsernameTextFormFieldState createState() =>
-      _AnimatedUsernameTextFormFieldState();
+  _AnimatedAdditionalTextFormFieldState createState() =>
+      _AnimatedAdditionalTextFormFieldState();
 }
 
-class _AnimatedUsernameTextFormFieldState
-    extends State<AnimatedUsernameTextFormField> {
+class _AnimatedAdditionalTextFormFieldState
+    extends State<AnimatedAdditionalTextFormField> {
   @override
   Widget build(BuildContext context) {
     return AnimatedTextFormField(
@@ -408,76 +410,7 @@ class _AnimatedUsernameTextFormFieldState
       autocorrect: false,
       autofillHints: widget.autofillHints,
       labelText: widget.labelText,
-      prefixIcon: Icon(FontAwesomeIcons.solidUserCircle, size: 20),
-      keyboardType: widget.keyboardType,
-      textInputAction: widget.textInputAction,
-      controller: widget.controller,
-      focusNode: widget.focusNode,
-      validator: widget.validator,
-      onFieldSubmitted: widget.onFieldSubmitted,
-      onSaved: widget.onSaved,
-      inertiaDirection: widget.inertiaDirection,
-    );
-  }
-}
-
-class AnimatedBirthdayTextFormField extends StatefulWidget {
-  AnimatedBirthdayTextFormField({
-    Key? key,
-    this.interval = const Interval(0.0, 1.0),
-    required this.animatedWidth,
-    this.loadingController,
-    this.inertiaController,
-    this.inertiaDirection,
-    this.enabled = true,
-    this.labelText,
-    this.keyboardType,
-    this.textInputAction,
-    this.controller,
-    this.focusNode,
-    this.validator,
-    this.onFieldSubmitted,
-    this.onSaved,
-    this.autofillHints,
-  })  : assert((inertiaController == null && inertiaDirection == null) ||
-            (inertiaController != null && inertiaDirection != null)),
-        super(key: key);
-
-  final Interval? interval;
-  final AnimationController? loadingController;
-  final AnimationController? inertiaController;
-  final double animatedWidth;
-  final bool enabled;
-  final String? labelText;
-  final TextInputType? keyboardType;
-  final TextInputAction? textInputAction;
-  final TextEditingController? controller;
-  final FocusNode? focusNode;
-  final FormFieldValidator<String>? validator;
-  final ValueChanged<String>? onFieldSubmitted;
-  final FormFieldSetter<String>? onSaved;
-  final TextFieldInertiaDirection? inertiaDirection;
-  final Iterable<String>? autofillHints;
-
-  @override
-  _AnimatedBirthdayTextFormFieldState createState() =>
-      _AnimatedBirthdayTextFormFieldState();
-}
-
-class _AnimatedBirthdayTextFormFieldState
-    extends State<AnimatedBirthdayTextFormField> {
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedTextFormField(
-      interval: widget.interval,
-      loadingController: widget.loadingController,
-      inertiaController: widget.inertiaController,
-      width: widget.animatedWidth,
-      enabled: widget.enabled,
-      autocorrect: false,
-      autofillHints: widget.autofillHints,
-      labelText: widget.labelText,
-      prefixIcon: Icon(FontAwesomeIcons.birthdayCake, size: 20),
+      prefixIcon: widget.prefixIcon,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       controller: widget.controller,

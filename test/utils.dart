@@ -26,11 +26,14 @@ List<LoginData> stubCallback(MockCallback mockCallback) {
   reset(mockCallback);
 
   final user = LoginData(email: 'near@gmail.com', password: '12345');
-  final user1 =
-      SignupData(email: 'near@gmail.com', password: '12345', username: 'near');
+  final user1 = SignupData(
+      email: 'near@gmail.com',
+      password: '12345',
+      username: 'near',
+      birthday: '');
   final invalidUser = LoginData(email: 'not.exists@gmail.com', password: '');
-  final invalidUser1 =
-      SignupData(email: 'not.exists@gmail.com', password: '', username: '');
+  final invalidUser1 = SignupData(
+      email: 'not.exists@gmail.com', password: '', username: '', birthday: '');
 
   when(mockCallback.usernameValidator(user.email)).thenReturn(null);
   when(mockCallback.usernameValidator('invalid-username'))

@@ -600,7 +600,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   }
 
   Widget _buildUsernameField(double width, LoginMessages messages, Auth auth) {
-    return AnimatedUsernameTextFormField(
+    return AnimatedAdditionalTextFormField(
       controller: _usernameController,
       animatedWidth: width,
       enabled: auth.isSignup,
@@ -610,6 +610,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       loadingController: _loadingController,
       interval: _usernameTextFieldLoadingAnimationInterval,
       labelText: messages.usernameHint,
+      prefixIcon: Icon(FontAwesomeIcons.solidUserCircle, size: 20),
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (value) {
@@ -621,7 +622,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   }
 
   Widget _buildBirthdayField(double width, LoginMessages messages, Auth auth) {
-    return AnimatedBirthdayTextFormField(
+    return AnimatedAdditionalTextFormField(
       controller: _birthdayController,
       animatedWidth: width,
       enabled: auth.isSignup,
@@ -631,6 +632,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       loadingController: _loadingController,
       interval: _birthdayTextFieldLoadingAnimationInterval,
       labelText: messages.birthdayHint,
+      prefixIcon: Icon(FontAwesomeIcons.birthdayCake, size: 20),
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (value) {
