@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+//messages
 class LoginMessages with ChangeNotifier {
   LoginMessages({
     this.usernameHint = defaultUsernameHint,
     this.emailHint = defaultEmailHint,
     this.passwordHint = defaultPasswordHint,
     this.confirmPasswordHint = defaultConfirmPasswordHint,
+    this.birthdayHint = defaultBirthdayHint,
     this.forgotPasswordButton = defaultForgotPasswordButton,
     this.loginButton = defaultLoginButton,
     this.signupButton = defaultSignupButton,
@@ -23,6 +25,7 @@ class LoginMessages with ChangeNotifier {
   static const defaultEmailHint = 'Email';
   static const defaultPasswordHint = 'Password';
   static const defaultConfirmPasswordHint = 'Confirm Password';
+  static const defaultBirthdayHint = 'DOB (mm/dd/yyyy)';
   static const defaultForgotPasswordButton = 'Forgot Password?';
   static const defaultLoginButton = 'LOGIN';
   static const defaultSignupButton = 'SIGNUP';
@@ -37,10 +40,10 @@ class LoginMessages with ChangeNotifier {
   static const defaultflushbarTitleError = 'Error';
   static const defaultSignUpSuccess = 'An activation link has been sent';
 
-  /// Hint text of the user name [TextField]
+  /// Hint text of the username [TextField]
   final String usernameHint;
 
-  /// Hint text of the user name [TextField]
+  /// Hint text of the email [TextField]
   final String emailHint;
 
   /// Hint text of the password [TextField]
@@ -48,6 +51,9 @@ class LoginMessages with ChangeNotifier {
 
   /// Hint text of the confirm password [TextField]
   final String confirmPasswordHint;
+
+  /// Hint text of the birthday [TextField]
+  final String birthdayHint;
 
   /// Forgot password button's label
   final String forgotPasswordButton;

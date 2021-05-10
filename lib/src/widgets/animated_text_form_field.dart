@@ -352,8 +352,8 @@ class _AnimatedPasswordTextFormFieldState
   }
 }
 
-class AnimatedUsernameTextFormField extends StatefulWidget {
-  AnimatedUsernameTextFormField({
+class AnimatedAdditionalTextFormField extends StatefulWidget {
+  AnimatedAdditionalTextFormField({
     Key? key,
     this.interval = const Interval(0.0, 1.0),
     required this.animatedWidth,
@@ -370,6 +370,7 @@ class AnimatedUsernameTextFormField extends StatefulWidget {
     this.onFieldSubmitted,
     this.onSaved,
     this.autofillHints,
+    this.prefixIcon,
   })  : assert((inertiaController == null && inertiaDirection == null) ||
             (inertiaController != null && inertiaDirection != null)),
         super(key: key);
@@ -389,14 +390,15 @@ class AnimatedUsernameTextFormField extends StatefulWidget {
   final FormFieldSetter<String>? onSaved;
   final TextFieldInertiaDirection? inertiaDirection;
   final Iterable<String>? autofillHints;
+  final Icon? prefixIcon;
 
   @override
-  _AnimatedUsernameTextFormFieldState createState() =>
-      _AnimatedUsernameTextFormFieldState();
+  _AnimatedAdditionalTextFormFieldState createState() =>
+      _AnimatedAdditionalTextFormFieldState();
 }
 
-class _AnimatedUsernameTextFormFieldState
-    extends State<AnimatedUsernameTextFormField> {
+class _AnimatedAdditionalTextFormFieldState
+    extends State<AnimatedAdditionalTextFormField> {
   @override
   Widget build(BuildContext context) {
     return AnimatedTextFormField(
@@ -408,7 +410,7 @@ class _AnimatedUsernameTextFormFieldState
       autocorrect: false,
       autofillHints: widget.autofillHints,
       labelText: widget.labelText,
-      prefixIcon: Icon(FontAwesomeIcons.solidUserCircle, size: 20),
+      prefixIcon: widget.prefixIcon,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       controller: widget.controller,

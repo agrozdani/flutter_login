@@ -231,6 +231,7 @@ class FlutterLogin extends StatefulWidget {
       this.usernameValidator,
       this.emailValidator,
       this.passwordValidator,
+      this.birthdayValidator,
       this.onSubmitAnimationCompleted,
       this.logoTag,
       this.titleTag,
@@ -281,6 +282,9 @@ class FlutterLogin extends StatefulWidget {
   /// Same as [emailValidator] but for username
   final FormFieldValidator<String>? usernameValidator;
 
+  /// Same as [emailValidator] but for username
+  final FormFieldValidator<String>? birthdayValidator;
+
   /// Called after the submit animation's completed. Put your route transition
   /// logic here. Recommend to use with [logoTag] and [titleTag]
   final Function? onSubmitAnimationCompleted;
@@ -328,6 +332,13 @@ class FlutterLogin extends StatefulWidget {
   static final FormFieldValidator<String> defaultPasswordValidator = (value) {
     if (value!.isEmpty || value.length <= 2) {
       return 'Password is too short!';
+    }
+    return null;
+  };
+
+  static final FormFieldValidator<String> defaultBirthdayValidator = (value) {
+    if (value!.isEmpty || !Regex.birthday.hasMatch(value)) {
+      return 'Invalid date entered!';
     }
     return null;
   };
@@ -592,6 +603,8 @@ class _FlutterLoginState extends State<FlutterLogin>
         widget.emailValidator ?? FlutterLogin.defaultEmailValidator;
     final passwordValidator =
         widget.passwordValidator ?? FlutterLogin.defaultPasswordValidator;
+    final birthdayValidator =
+        widget.birthdayValidator ?? FlutterLogin.defaultBirthdayValidator;
 
     Widget footerWidget = SizedBox();
     if (widget.footer != null) {
@@ -647,6 +660,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                         usernameValidator: usernameValidator,
                         emailValidator: emailValidator,
                         passwordValidator: passwordValidator,
+                        birthdayValidator: birthdayValidator,
                         onSubmit: _reverseHeaderAnimation,
                         onSubmitCompleted: widget.onSubmitAnimationCompleted,
                         hideSignUpButton: widget.hideSignUpButton,

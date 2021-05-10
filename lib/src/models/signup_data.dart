@@ -4,16 +4,18 @@ class SignupData {
   final String username;
   final String email;
   final String password;
+  final String birthday;
 
   SignupData({
     required this.username,
     required this.email,
     required this.password,
+    required this.birthday,
   });
 
   @override
   String toString() {
-    return '$runtimeType($username, $email, $password)';
+    return '$runtimeType($username, $email, $password, $birthday)';
   }
 
   @override
@@ -21,11 +23,12 @@ class SignupData {
     if (other is SignupData) {
       return username == other.username &&
           email == other.email &&
-          password == other.password;
+          password == other.password &&
+          birthday == other.birthday;
     }
     return false;
   }
 
   @override
-  int get hashCode => hash3(username, email, password);
+  int get hashCode => hash4(username, email, password, birthday);
 }
