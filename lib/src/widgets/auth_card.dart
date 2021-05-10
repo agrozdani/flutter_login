@@ -633,7 +633,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       interval: _birthdayTextFieldLoadingAnimationInterval,
       labelText: messages.birthdayHint,
       prefixIcon: Icon(FontAwesomeIcons.birthdayCake, size: 20),
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.datetime,
       textInputAction: TextInputAction.next,
       onFieldSubmitted: (value) {
         FocusScope.of(context).requestFocus(_emailFocusNode);

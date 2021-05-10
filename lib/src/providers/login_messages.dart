@@ -25,7 +25,7 @@ class LoginMessages with ChangeNotifier {
   static const defaultEmailHint = 'Email';
   static const defaultPasswordHint = 'Password';
   static const defaultConfirmPasswordHint = 'Confirm Password';
-  static const defaultBirthdayHint = 'Date of birth';
+  static const defaultBirthdayHint = 'DOB (mm/dd/yyyy)';
   static const defaultForgotPasswordButton = 'Forgot Password?';
   static const defaultLoginButton = 'LOGIN';
   static const defaultSignupButton = 'SIGNUP';

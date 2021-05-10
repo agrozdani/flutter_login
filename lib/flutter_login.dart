@@ -338,7 +338,7 @@ class FlutterLogin extends StatefulWidget {
 
   static final FormFieldValidator<String> defaultBirthdayValidator = (value) {
     if (value!.isEmpty || !Regex.birthday.hasMatch(value)) {
-      return 'Use this format: mm/dd/yyyy';
+      return 'Invalid date entered!';
     }
     return null;
   };
