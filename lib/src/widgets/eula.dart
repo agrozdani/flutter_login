@@ -9,26 +9,38 @@ class Eula extends StatelessWidget {
   Widget build(BuildContext context) {
     final linkStyle = TextStyle(color: Colors.blue);
 
-    return RichText(
-        textAlign: TextAlign.center,
-        text: TextSpan(style: Theme.of(context).textTheme.bodyText2, children: [
-          TextSpan(text: 'By clicking Sign up, you agree to our '),
-          TextSpan(
-              text: 'Terms of Service, ',
-              style: linkStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  await _launchURLEULA();
-                }),
-          TextSpan(text: 'and have read our '),
-          TextSpan(
-              text: 'Privacy Policy',
-              style: linkStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () async {
-                  await _launchURLPP();
-                })
-        ]));
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        RichText(
+          textAlign: TextAlign.center,
+          text:
+              TextSpan(style: Theme.of(context).textTheme.bodyText2, children: [
+            TextSpan(text: 'By clicking Sign up, you agree to our '),
+            TextSpan(
+                text: 'Terms of Service, ',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () async {
+                    await _launchURLEULA();
+                  }),
+            TextSpan(text: 'and have read our '),
+            TextSpan(
+                text: 'Privacy Policy',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () async {
+                    await _launchURLPP();
+                  })
+          ]),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+    );
   }
 
   Future _launchURLEULA() async => await canLaunch(urlEULA)
