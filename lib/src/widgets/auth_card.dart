@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/src/models/signup_data.dart';
+import 'package:flutter_login/src/widgets/eula.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -889,11 +890,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             width: cardWidth,
             child: Column(
               children: <Widget>[
-                !widget.hideForgotPasswordButton
-                    ? _buildForgotPassword(theme, messages)
-                    : SizedBox.fromSize(
-                        size: Size.fromHeight(16),
-                      ),
+                auth.isLogin ? _buildForgotPassword(theme, messages) : Eula(),
                 _buildSubmitButton(theme, messages, auth),
                 !widget.hideSignUpButton
                     ? _buildSwitchAuthButton(theme, messages, auth, loginTheme)
