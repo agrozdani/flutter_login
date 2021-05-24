@@ -1,6 +1,5 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:quiver/strings.dart';
+import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Eula extends StatelessWidget {
@@ -12,7 +11,7 @@ class Eula extends StatelessWidget {
 
     return RichText(
         textAlign: TextAlign.center,
-        text: TextSpan(children: [
+        text: TextSpan(style: Theme.of(context).textTheme.bodyText2, children: [
           TextSpan(text: 'By clicking Sign up, you agree to our '),
           TextSpan(
               text: 'Terms of Service, ',
@@ -30,13 +29,6 @@ class Eula extends StatelessWidget {
                   await _launchURLPP();
                 })
         ]));
-
-    // Wrap(
-    //   children: [
-    //     TextButton(onPressed: _launchURLEULA, child: Text('EULA')),
-    //     Text('This should contain eula'),
-    //   ],
-    // );
   }
 
   Future _launchURLEULA() async => await canLaunch(urlEULA)
